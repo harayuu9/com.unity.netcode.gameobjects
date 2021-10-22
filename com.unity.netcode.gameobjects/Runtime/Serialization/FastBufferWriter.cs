@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
@@ -390,6 +391,17 @@ namespace Unity.Netcode
         {
             var bufferSerializer = new BufferSerializer<BufferSerializerWriter>(new BufferSerializerWriter(this));
             value.NetworkSerialize(bufferSerializer);
+        }
+        public void WriteNetworkSerializable<T>(in T[] array) where T : INetworkSerializable
+        {
+	        var bufferSerializer = new BufferSerializer<BufferSerializerWriter>(new BufferSerializerWriter(this));
+	        var sizeInTs         = array.Length;
+	        WriteValueSafe(sizeInTs);
+
+	        foreach (var v in array)
+	        {
+		        v.NetworkSerialize(bufferSerializer);
+	        }
         }
 
         /// <summary>

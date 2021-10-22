@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Unity.Netcode
 {
-    internal enum NetworkPrefabOverride
+    public enum NetworkPrefabOverride
     {
         None,
         Prefab,
@@ -14,7 +14,7 @@ namespace Unity.Netcode
     /// Class that represents a NetworkPrefab
     /// </summary>
     [Serializable]
-    internal class NetworkPrefab
+    public class NetworkPrefab
     {
         /// <summary>
         /// The override setttings for this NetworkPrefab

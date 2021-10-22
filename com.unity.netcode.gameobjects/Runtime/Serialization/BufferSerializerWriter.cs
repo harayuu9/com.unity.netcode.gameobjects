@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Unity.Netcode
 {
@@ -33,6 +34,10 @@ namespace Unity.Netcode
         {
             m_Writer.WriteValueSafe(array);
         }
+        public void SerializeValue<T>(ref List<T> array) where T : unmanaged
+        {
+	        m_Writer.WriteValueSafe(array.ToArray());
+        }
 
         public void SerializeValue(ref byte value)
         {
@@ -48,6 +53,21 @@ namespace Unity.Netcode
         {
             m_Writer.WriteNetworkSerializable(value);
         }
+        public void SerializeNetworkSerializable<T>(ref T[] value) where T : INetworkSerializable, new()
+        {
+	        m_Writer.WriteNetworkSerializable(value);
+        }
+        public void SerializeNetworkSerializable<T>(ref List<T> value) where T : INetworkSerializable, new()
+        {	 
+	        var bufferSerializer = new BufferSerializer<BufferSerializerWriter>(new BufferSerializerWriter(m_Writer));
+	        var sizeInTs         = value.Count;
+	        m_Writer.WriteValueSafe(sizeInTs);
+
+	        foreach (var v in value)
+	        {
+		        v.NetworkSerialize(bufferSerializer);
+	        }
+        }
 
         public bool PreCheck(int amount)
         {
@@ -62,6 +82,10 @@ namespace Unity.Netcode
         public void SerializeValuePreChecked<T>(ref T[] array) where T : unmanaged
         {
             m_Writer.WriteValue(array);
+        }
+        public void SerializeValuePreChecked<T>(ref List<T> array) where T : unmanaged
+        {
+	        m_Writer.WriteValue(array.ToArray());
         }
 
         public void SerializeValuePreChecked(ref byte value)

@@ -35,7 +35,7 @@ namespace Unity.Netcode
         /// </summary>
         [SerializeField]
         [Tooltip("The prefabs that can be spawned across the network")]
-        internal List<NetworkPrefab> NetworkPrefabs = new List<NetworkPrefab>();
+        public List<NetworkPrefab> NetworkPrefabs = new List<NetworkPrefab>();
 
         /// <summary>
         /// This dictionary provides a quick way to check and see if a NetworkPrefab has a NetworkPrefab override.

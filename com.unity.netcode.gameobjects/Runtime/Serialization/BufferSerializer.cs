@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 namespace Unity.Netcode
 {
     /// <summary>
@@ -69,6 +70,14 @@ namespace Unity.Netcode
         {
             m_Implementation.SerializeNetworkSerializable(ref value);
         }
+        public void SerializeNetworkSerializable<T>(ref T[] value) where T : INetworkSerializable, new()
+        {
+	        m_Implementation.SerializeNetworkSerializable(ref value);
+        }
+        public void SerializeNetworkSerializable<T>(ref List<T> value) where T : INetworkSerializable, new()
+        {
+	        m_Implementation.SerializeNetworkSerializable(ref value);
+        }
 
         /// <summary>
         /// Serialize a string.
@@ -106,6 +115,10 @@ namespace Unity.Netcode
         public void SerializeValue<T>(ref T[] array) where T : unmanaged
         {
             m_Implementation.SerializeValue(ref array);
+        }
+        public void SerializeValue<T>(ref List<T> array) where T : unmanaged
+        {
+	        m_Implementation.SerializeValue(ref array);
         }
 
         /// <summary>
