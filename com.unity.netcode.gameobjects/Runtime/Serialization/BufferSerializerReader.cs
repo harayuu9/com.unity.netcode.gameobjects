@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 
 namespace Unity.Netcode
 {
@@ -34,11 +33,6 @@ namespace Unity.Netcode
         {
             m_Reader.ReadValueSafe(out array);
         }
-        public void SerializeValue<T>(ref List<T> list) where T : unmanaged
-        {
-	        m_Reader.ReadValueSafe(out T[] array);
-	        list = new List<T>(array);
-        }
 
         public void SerializeValue(ref byte value)
         {
@@ -54,15 +48,6 @@ namespace Unity.Netcode
         {
             m_Reader.ReadNetworkSerializable(out value);
         }
-        public void SerializeNetworkSerializable<T>(ref T[]     value) where T : INetworkSerializable, new()
-        {
-	        m_Reader.ReadNetworkSerializable(out value);
-        }
-        public void SerializeNetworkSerializable<T>(ref List<T> value) where T : INetworkSerializable, new()
-        {
-	        m_Reader.ReadNetworkSerializable(out T[] array);
-	        value = new List<T>(array);
-        }
 
         public bool PreCheck(int amount)
         {
@@ -77,10 +62,6 @@ namespace Unity.Netcode
         public void SerializeValuePreChecked<T>(ref T[] array) where T : unmanaged
         {
             m_Reader.ReadValue(out array);
-        }
-        public void SerializeValuePreChecked<T>(ref List<T> array) where T : unmanaged
-        {
-	        throw new NotImplementedException();
         }
 
         public void SerializeValuePreChecked(ref byte value)
