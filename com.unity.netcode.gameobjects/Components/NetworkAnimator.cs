@@ -8,6 +8,7 @@ namespace Unity.Netcode.Components
     /// A prototype component for syncing animations
     /// </summary>
     [AddComponentMenu("Netcode/" + nameof(NetworkAnimator))]
+    [RequireComponent(typeof(Animator))]
     public class NetworkAnimator : NetworkBehaviour
     {
         internal struct AnimationMessage : INetworkSerializable
@@ -307,8 +308,12 @@ namespace Unity.Netcode.Components
                     var valueInt = m_Animator.GetInteger(hash);
                     fixed (void* value = cacheValue.Value)
                     {
-	                    UnsafeUtility.WriteArrayElement(value, 0, valueInt);
-                        BytePacker.WriteValuePacked(writer, (uint)valueInt);
+                        var oldValue = UnsafeUtility.AsRef<int>(value);
+                        if (valueInt != oldValue)
+                        {
+                            UnsafeUtility.WriteArrayElement(value, 0, valueInt);
+                            BytePacker.WriteValuePacked(writer, (uint)valueInt);
+                        }
                     }
                 }
                 else if (cacheValue.Type == AnimationParamEnumWrapper.AnimatorControllerParameterBool)
@@ -316,8 +321,12 @@ namespace Unity.Netcode.Components
                     var valueBool = m_Animator.GetBool(hash);
                     fixed (void* value = cacheValue.Value)
                     {
-	                    UnsafeUtility.WriteArrayElement(value, 0, valueBool);
-	                    writer.WriteValueSafe(valueBool);
+                        var oldValue = UnsafeUtility.AsRef<bool>(value);
+                        if (valueBool != oldValue)
+                        {
+                            UnsafeUtility.WriteArrayElement(value, 0, valueBool);
+                            writer.WriteValueSafe(valueBool);
+                        }
                     }
                 }
                 else if (cacheValue.Type == AnimationParamEnumWrapper.AnimatorControllerParameterFloat)
@@ -325,8 +334,13 @@ namespace Unity.Netcode.Components
                     var valueFloat = m_Animator.GetFloat(hash);
                     fixed (void* value = cacheValue.Value)
                     {
-	                    UnsafeUtility.WriteArrayElement(value, 0, valueFloat);
-	                    writer.WriteValueSafe(valueFloat);
+                        var oldValue = UnsafeUtility.AsRef<float>(value);
+                        if (valueFloat != oldValue)
+                        {
+                            UnsafeUtility.WriteArrayElement(value, 0, valueFloat);
+
+                            writer.WriteValueSafe(valueFloat);
+                        }
                     }
                 }
             }
