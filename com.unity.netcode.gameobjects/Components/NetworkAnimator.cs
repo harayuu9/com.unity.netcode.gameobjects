@@ -9,7 +9,7 @@ namespace Unity.Netcode.Components
     /// A prototype component for syncing animations
     /// </summary>
     [AddComponentMenu("Netcode/" + nameof(NetworkAnimator))]
-    [RequireComponent(typeof(Animator))]
+    //[RequireComponent(typeof(Animator))]
     public class NetworkAnimator : NetworkBehaviour
     {
         internal struct AnimationMessage : INetworkSerializable
